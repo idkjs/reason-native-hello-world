@@ -4,9 +4,9 @@
 2. Install `reason` language options with `opam install reason`
 3. Create a `hello.re` file:
 
-> ```reason
-> print_string("Hello world!\n");
-> ```
+```reason
+print_string("Hello world!\n");
+```
 
 4. Compile `hello.re` with `ocamlc -o hello -pp "refmt -p ml" -impl hello.re`.
 
