@@ -1,17 +1,35 @@
 # HelloWorld ReasonML Native
 
+A note to self on using `OCaml` with the `ReasonML` syntax without `Bucklescript`.
+
+## Setup
+
 1. Install [opam](https://opam.ocaml.org/)
 2. Install `reason` language options with `opam install reason`
-3. Create a `hello.re` file:
 
-```reason
+## HelloWorld
+
+Create a `hello.re` file:
+
+```ocaml
+// hello.re
 print_string("Hello world!\n");
 ```
 
-4. Compile `hello.re` with `ocamlc -o hello -pp "refmt -p ml" -impl hello.re`.
+Compile `hello.re` by running `ocamlc -o hello -pp "refmt -p ml" -impl hello.re`.
 
-5. Open your terminal and run `./hello`.
+Open your terminal and run `./hello`.
 
-## Source
+Your output is:
+
+```sh
+➜  helloworld ocamlc -o hello -pp "refmt -p ml" -impl hello.re
+➜  helloworld ./hello
+Hello world!
+```
+
+## Sources
 
 [https://riptutorial.com/ocaml/example/7096/hello-world](https://riptutorial.com/ocaml/example/7096/hello-world)
+
+[repo](https://github.com/idkjs/reason-native-hello-world)
