@@ -1,0 +1,4 @@
+(executable
+ (name counter_server)
+ (libraries Lwt logs)
+)
