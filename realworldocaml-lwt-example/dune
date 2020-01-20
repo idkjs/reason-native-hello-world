@@ -1,0 +1,3 @@
+(executable
+ (name rwoLwt)
+ (libraries lwt cohttp))

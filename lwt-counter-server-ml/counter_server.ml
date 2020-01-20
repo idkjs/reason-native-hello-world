@@ -32,17 +32,29 @@ let rec handle_connection ic oc () =
 
 let accept_connection conn =
     let fd, _ = conn in
-    let ic = Lwt_io.of_fd Lwt_io.Input fd in
-    let oc = Lwt_io.of_fd Lwt_io.Output fd in
+    let ic = Lwt_io.of_fd ~mode:Lwt_io.Input fd in
+    let oc = Lwt_io.of_fd ~mode:Lwt_io.Output fd in
     Lwt.on_failure (handle_connection ic oc ()) (fun e -> Logs.err (fun m -> m "%s" (Printexc.to_string e) ));
     Logs_lwt.info (fun m -> m "New connection") >>= return
-
+(* let accept_connection conn =
+  let fd, _ = conn in
+  let input_console = Lwt_io.of_fd Lwt_io.Input fd in
+  let output_console = Lwt_io.of_fd Lwt_io.Output fd in
+  Lwt.on_failure (handle_connection input_console output_console 0 ())
+    (fun e -> Logs.err (fun m -> m "%s" (Printexc.to_string e)));
+  Logs_lwt.info (fun m -> m "New connection") >>= return *)
+(*
+let create_socket () =
+  let open Lwt_unix in
+  let sock = socket PF_INET SOCK_STREAM 0 in
+  (bind sock @@ ADDR_INET(listen_address, port);
+   listen sock backlog;
+   sock) *)
 let create_socket () =
     let open Lwt_unix in
     let sock = socket PF_INET SOCK_STREAM 0 in
-    bind sock @@ ADDR_INET(listen_address, port);
-    listen sock backlog;
-    sock
+    ignore @@ bind sock @@ ADDR_INET(listen_address, port);
+    || maybe ADDR_INET(listen_address, port) |> bind sock
 
 let create_server sock =
     let rec serve () =
@@ -55,3 +67,4 @@ let () =
     let sock = create_socket () in
     let serve = create_server sock in
     Lwt_main.run @@ serve ()
+

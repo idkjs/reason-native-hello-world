@@ -6,6 +6,7 @@
  */;
 
 open Lwt;
+open Lwt.Infix;
 
 /* Shared mutable counter */
 let counter = ref(0);
@@ -37,15 +38,14 @@ let rec handle_connection = (ic, oc, ()) =>
       }
   );
 
-let accept_connection = (conn) => {
+let accept_connection = conn => {
   let (fd, _) = conn;
-  let ic = Lwt_io.of_fd(Lwt_io.Input, fd);
-  let oc = Lwt_io.of_fd(Lwt_io.Output, fd);
-  Lwt.on_failure(
-    handle_connection(ic, oc, ()),
-    (e) => Logs.err((m) => m("%s", Printexc.to_string(e)))
+  let ic = Lwt_io.of_fd(~mode=Lwt_io.Input, fd);
+  let oc = Lwt_io.of_fd(~mode=Lwt_io.Output, fd);
+  Lwt.on_failure(handle_connection(ic, oc, ()), e =>
+    Logs.err(m => m("%s", Printexc.to_string(e)))
   );
-  Logs_lwt.info((m) => m("New connection")) >>= return;
+  Logs_lwt.info(m => m("New connection")) >>= return;
 };
 
 let create_socket = () => {
