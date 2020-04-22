@@ -1,0 +1,3 @@
+(executables
+ (names code force_wait)
+ (libraries lwt lwt_ppx lwt.unix ))
